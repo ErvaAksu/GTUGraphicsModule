@@ -1,0 +1,300 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0px;
+    box-sizing: border-box;
+    background-color: rgb(231, 231, 231);
+}
+
+.inner-box {
+    background-color: white;
+    padding: 10px;
+    margin: 40px;
+    margin-top: 0px;
+}
+
+.inner-selection {
+    margin-top: 0px;
+    border-bottom: 2px solid rgb(231, 231, 231);
+    display:flex;
+}
+
+.inner-head {
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    color: rgb(88, 88, 88);
+    margin-left: 20px;
+    width:85%;
+}
+
+.buttons {
+    width: 15%;
+    display: flex;
+    
+}
+.universite-button {
+    margin-bottom: 0px;
+    width: 120px;
+    height: 60px;
+    border: none;
+    background-color: white;
+    font-family: 'Roboto', sans-serif;
+    color: rgb(88, 88, 88);
+    cursor: pointer;
+    border-bottom: 2px solid;
+    border-bottom-color: #008DC5;
+}
+
+
+
+.secili-bolum-button {
+    margin-bottom: 0px;
+    width: 140px;
+    height: 60px;
+    border: none;
+    background-color: white;
+    font-family: 'Roboto', sans-serif;
+    color: rgb(88, 88, 88);
+    cursor: pointer;
+    border-bottom: 2px solid white;
+}
+
+
+.secili-konu-button {
+    margin-bottom: 0px;
+    width: 140px;
+    height: 60px;
+    border: none;
+    background-color: white;
+    font-family: 'Roboto', sans-serif;
+    color: rgb(88, 88, 88);
+    cursor: pointer;
+    border-bottom: 2px solid white;
+}
+
+#secili-bolum-section{
+
+    display:none;
+
+}
+
+#secili-konu-section {
+    display: none;
+}
+
+.top-bar {
+    margin-left: 0px;
+    background-color: #203771;
+    padding: 12px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.gtu-logo {
+    margin-top: 0px;
+    margin-left: 35px;
+    height: 40px; /* Ensure the container doesn't exceed the width of its parent */
+    width: 45px;
+}
+
+    .gtu-logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Maintain aspect ratio while covering the entire box */
+        display: block;
+    }
+
+.top-heading {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    color: #f4f4f4;
+}
+
+    .top-heading h2 {
+        font-family: 'Rubik', sans-serif;
+        font-size: 22px;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .top-heading h3 {
+        font-family: 'Inter', sans-serif;
+        font-size: 16px;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+nav {
+    background-color: #425290;
+    color: white;
+    height: 51px;
+    text-align: left;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.panel-heading {
+    background-color: #4c4f5f;
+    padding: 14px;
+    margin-left: 10px;
+}
+
+
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    margin-left: 30px;
+}
+
+.dropdown-content {
+    margin-left: 10px;
+    display: none;
+    position: absolute;
+    background-color: #4b4d5e;
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content a {
+    color: white;
+    padding: 12px 16px;
+    display: block;
+    text-decoration: none;
+}
+
+    .dropdown-content a:hover {
+        background-color: #57596d;
+    }
+
+.nested-dropdown a::after {
+    content: '\00BB'; /* Unicode character for right-pointing triangle/arrow */
+    position: absolute;
+    right: 10px;
+}
+
+.nested-dropdown-content a::after {
+    content: none;
+}
+
+.nested-dropdown {
+    position: relative;
+    display: block;
+}
+
+.nested-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #4b4d5e;
+    min-width: 240px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    top: 0;
+    left: 100%;
+}
+
+.nested-dropdown:hover .nested-dropdown-content {
+    display: block;
+}
+
+.option-panel{
+    display: flex;
+
+
+}
+
+.birim-container{
+    width:40%;
+
+}
+
+.alt-birim-container{
+    width:45%;
+
+}
+
+.button-container{
+    width:15%;
+
+}
+
+.birim-heading {
+    font-size: 12px;
+    font-family: 'Roboto', sans-serif;
+    color: rgb(88, 88, 88);
+    margin-left: 20px;
+}
+
+.alt-birim-heading {
+    font-size: 12px;
+    font-family: 'Roboto', sans-serif;
+    color: rgb(88, 88, 88);
+    margin-left: 20px;
+}
+
+.button-container {
+   
+    margin-left: 30px;
+    margin-top: 50px;
+   
+}
+
+.option-button {
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    color: white;
+    background-color: #0078AF;
+    height:40px;
+    width:75px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.option {
+    margin-left: 20px;
+    margin-top: 50px;
+}
+
+    .option select {
+
+        font-size: 15px;
+        font-family: 'Roboto', sans-serif;
+        color: rgb(88, 88, 88);
+        width: 100%;
+        height: 50px;
+        border: 2px solid rgb(231, 231, 231);
+        border-radius: 4px;
+        
+    }
+
+
+
+.pdf-button-container {
+    margin: 5px;
+    display: flex;
+    height: 30px;
+    width: 100%;
+}
+
+.year-option {
+    margin: 10px;
+    border: 2px solid #97a2c7;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    color: rgb(88, 88, 88);
+    background-color: #f4f4f4;
+    width: 80px;
+    height: 30px;
+    cursor: pointer;
+}
+

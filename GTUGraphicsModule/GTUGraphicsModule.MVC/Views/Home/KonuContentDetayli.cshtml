@@ -1,0 +1,277 @@
+﻿@model IList<GTUGraphicsModule.Models.Models.ViewModels.PerformansGostergeKonuVM>
+
+@using System.Text.Json
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/KonuContentDetayli.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="~/js/konu_content_detayli.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+</head>
+
+<body>
+
+    <div class="inner-section-layout">
+
+        <div class="selections-container">
+
+            <div class="color-selection-button-konu" onclick="openPopupKonu()">Renk Paleti</div>
+
+            <select class="year-option" id="year-select-konu">
+                <option value="2023" selected>2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+            </select>
+
+        </div>
+
+        <div class="output-button-container">
+
+            <button class="pdf-button" id="pdfButtonKonu">Pdf</button>
+            <button class="excel-button" id="excelButtonKonu" onclick="exportChartToExcelKonu()">Excel</button>
+
+        </div>
+
+
+
+    </div>
+
+    <script>
+
+        var modelKonu = @Html.Raw(JsonSerializer.Serialize(Model));
+
+    </script>
+
+    <!-- The overlay and pop-up content -->
+    <div id="overlayKonu">
+        <div id="popupKonu">
+            <!-- Use a "Cancel" button to close the pop-up -->
+            <button id="closeKonu" onclick="closePopupKonu()">X</button>
+            <div id="colorSettingsKonu">
+
+                <!-- Existing color-inner-selection container -->
+                <div class="color-inner-selection-konu">
+                    <div class="input-part-konu">
+                        <label for="thresholdInput">Sınır:</label>
+                        <input class="threshold" type="number" value="0">
+                    </div>
+
+                    <div class="color-part-konu">
+                        <label for="colorInput">Renk:</label>
+                        <input type="color" value="#FF0000">
+                    </div>
+                </div>
+
+                <div id="add-delete-part-konu">
+
+
+                    <button id="addColorSelectionKonu" onclick="addColorSelectionKonu()">
+
+                        <img class="icon" src="~/img/add-icon.png">
+
+                    </button>
+                    <button id="deleteColorSelectionKonu" onclick="deleteColorSelectionKonu()">
+
+                        <img class="icon" src="~/img/delete-icon.png">
+
+                    </button>
+
+
+                </div>
+
+                <!-- Button to trigger the color and scale update -->
+                <button id="uygula-button-konu" onclick="uygulaButtonKonu()">Uygula</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="pdfKonu" class="box-container">
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            <div class="box">
+                <div class="box-heading">
+
+                    <h3>@Model[i].VeriKategorisi.kod - @Model[i].VeriKategorisi.aciklama</h3>
+
+                </div>
+
+                <div class="chart-table">
+
+                    <div class="horizontal-bar">
+
+                        <canvas id="konu-bar-chart-@i" height="200"></canvas>
+
+                    </div>
+
+                    <div class="table" id="konu-table-@i">
+                        <table>
+                            <caption class="table-heading" id="konu-table-heading-@i"></caption>
+                            <thead>
+                                <tr>
+                                    <th>Performans Göstergeleri</th>
+                                    <th>H</th>
+                                    <th>G</th>
+                                    <th>Gerçekleşme Oranı %</th>
+                                </tr>
+                            </thead>
+                            <tbody id="konu-table-body-@i">
+                            </tbody>
+                        </table>
+
+                    </div>
+
+
+                    <script>
+                        var konuViewModel = @Html.Raw(JsonSerializer.Serialize(Model[i]));
+                        initializeKonuBarChart(@i, konuViewModel);
+                    </script>
+
+
+                </div>
+
+
+            </div>
+        }
+    </div>
+
+
+    <script>
+        document.getElementById('pdfButtonKonu').addEventListener('click', function () {
+            // Use html2pdf library to generate PDF
+            var element = document.getElementById('pdfKonu');
+            html2pdf(element, {
+                margin: 1, // Adjust margin as needed
+                filename: 'chart.pdf',
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 1 }, // Adjust scale as needed
+                jsPDF: { format: 'a2', orientation: 'landscape' }
+            });
+        });
+    </script>
+
+    <script>
+
+        function addColorSelectionKonu() {
+            var colorSettings = document.getElementById('colorSettingsKonu');
+
+            // Create a new color-inner-selection div
+            var newColorInnerSelection = document.createElement('div');
+            newColorInnerSelection.className = 'color-inner-selection-konu';
+
+            // Create input fields for the new color-inner-selection
+            var inputPart = document.createElement('div');
+            inputPart.className = 'input-part-konu';
+            inputPart.innerHTML = '<label for="thresholdInput">Sınır:</label>' +
+                '<input class="threshold" type="number" value="0">';
+
+            var colorPart = document.createElement('div');
+            colorPart.className = 'color-part-konu';
+            colorPart.innerHTML = '<label for="colorInput">Renk:</label>' +
+                '<input type="color" value="#FF0000">';
+
+            newColorInnerSelection.appendChild(inputPart);
+            newColorInnerSelection.appendChild(colorPart);
+
+            // Append the new color-inner-selection to the colorSettings div
+            colorSettings.appendChild(newColorInnerSelection);
+
+            // Update the size of the popup
+            updatePopupSizeKonu();
+        }
+
+        // Function to delete the last added color-inner-selection
+        function deleteColorSelectionKonu() {
+            var colorSettings = document.getElementById('colorSettingsKonu');
+            var colorInnerSelections = document.querySelectorAll('.color-inner-selection-konu');
+
+            // Ensure there is at least one color-inner-selection to delete
+            if (colorInnerSelections.length > 0) {
+                // Remove the last color-inner-selection
+                colorSettings.removeChild(colorInnerSelections[colorInnerSelections.length - 1]);
+
+                // Update the size of the popup
+                updatePopupSizeKonu();
+            }
+        }
+
+        // Function to update the size of the popup based on the number of color-inner-selections
+        function updatePopupSizeKonu() {
+            var colorInnerSelections = document.querySelectorAll('.color-inner-selection-konu');
+            var popup = document.getElementById('popupKonu');
+
+            // Calculate the new height based on the number of color-inner-selections
+            var newHeight = 15 + colorInnerSelections.length * 5; // Adjust the factor as needed
+
+            // Update the height of the popup
+            popup.style.height = newHeight + '%';
+
+            console.log(popup.style.height);
+
+        }
+
+
+    </script>
+
+
+
+
+    <script>
+        // Function to open the pop-up
+        function openPopupKonu() {
+            document.getElementById('overlayKonu').style.display = 'block';
+        }
+
+        // Function to close the pop-up
+        function closePopupKonu() {
+            document.getElementById('overlayKonu').style.display = 'none';
+        }
+
+        function uygulaButtonKonu() {
+            document.getElementById('overlayKonu').style.display = 'none';
+
+            let newModel = @Html.Raw(JsonSerializer.Serialize(Model));
+            var colorParts = document.querySelectorAll('.color-inner-selection-konu');
+            console.log(newModel);
+            for (let i = 0; i < newModel.length; i++) {
+                updateColorsAndScalesKonu(i, colorParts);
+
+            }
+
+        }
+
+    </script>
+
+    <script type="text/javascript">
+
+        document.getElementById('year-select-konu').addEventListener('change', function () {
+
+            for (let i = 0; i < modelKonu.length; i++) {
+
+                let d = modelKonu[i];
+                updateKonuBarChart(i, d);
+
+
+            }
+        });
+
+
+
+    </script>
+
+
+
+</body>
+
+</html>
+

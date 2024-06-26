@@ -1,0 +1,278 @@
+﻿
+@model IList<GTUGraphicsModule.Models.Models.ViewModels.PerformansGostergeBirimVM>
+
+@using System.Text.Json
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/BirimContentDetayli.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="~/js/birim_content_detayli.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+</head>
+
+<body>
+
+    <div class="inner-section-layout">
+
+        <div class="selections-container">
+
+            <div class="color-selection-button-birim" onclick="openPopupBirim()">Renk Paleti</div>
+
+            <select class="year-option" id="year-select-birim">
+                <option value="2023" selected>2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+            </select>
+
+        </div>
+
+        <div class="output-button-container">
+
+            <button class="pdf-button" id="pdfButtonBirim">Pdf</button>
+            <button class="excel-button" id="excelButtonBirim" onclick="exportChartToExcelBirim()">Excel</button>
+
+        </div>
+
+
+
+    </div>
+
+    <script>
+
+        var modelBirim = @Html.Raw(JsonSerializer.Serialize(Model));
+
+    </script>
+
+    <!-- The overlay and pop-up content -->
+    <div id="overlayBirim">
+        <div id="popupBirim">
+            <!-- Use a "Cancel" button to close the pop-up -->
+            <button id="closeBirim" onclick="closePopupBirim()">X</button>
+            <div id="colorSettingsBirim">
+
+                <!-- Existing color-inner-selection container -->
+                <div class="color-inner-selection-birim">
+                    <div class="input-part-birim">
+                        <label for="thresholdInput">Sınır:</label>
+                        <input class="threshold" type="number" value="0">
+                    </div>
+
+                    <div class="color-part-birim">
+                        <label for="colorInput">Renk:</label>
+                        <input type="color" value="#FF0000">
+                    </div>
+                </div>
+
+                <div id="add-delete-part-birim">
+
+
+                    <button id="addColorSelectionBirim" onclick="addColorSelectionBirim()">
+
+                        <img class="icon" src="~/img/add-icon.png">
+
+                    </button>
+                    <button id="deleteColorSelectionBirim" onclick="deleteColorSelectionBirim()">
+
+                        <img class="icon" src="~/img/delete-icon.png">
+
+                    </button>
+
+
+                </div>
+
+                <!-- Button to trigger the color and scale update -->
+                <button id="uygula-button-birim" onclick="uygulaButtonBirim()">Uygula</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="pdfBirim" class="box-container">
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            <div class="box">
+                <div class="box-heading">
+
+                    <h3>@Model[i].VeriKategorisi.kod - @Model[i].VeriKategorisi.aciklama</h3>
+
+                </div>
+
+                <div class="chart-table">
+
+                    <div class="horizontal-bar">
+
+                        <canvas id="birim-bar-chart-@i" height="200"></canvas>
+
+                    </div>
+
+                    <div class="table" id="birim-table-@i">
+                        <table>
+                            <caption class="table-heading" id="birim-table-heading-@i"></caption>
+                            <thead>
+                                <tr>
+                                    <th>Performans Göstergeleri</th>
+                                    <th>H</th>
+                                    <th>G</th>
+                                    <th>Gerçekleşme Oranı %</th>
+                                </tr>
+                            </thead>
+                            <tbody id="birim-table-body-@i">
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    
+                    <script>
+                        var birimViewModel = @Html.Raw(JsonSerializer.Serialize(Model[i]));
+                        initializeBirimBarChart(@i, birimViewModel);
+                    </script>
+
+
+                </div>
+
+
+            </div>
+        }
+    </div>
+
+
+    <script>
+        document.getElementById('pdfButtonBirim').addEventListener('click', function () {
+            // Use html2pdf library to generate PDF
+            var element = document.getElementById('pdfBirim');
+            html2pdf(element, {
+                margin: 1, // Adjust margin as needed
+                filename: 'chart.pdf',
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 1 }, // Adjust scale as needed
+                jsPDF: { format: 'a2', orientation: 'landscape' }
+            });
+        });
+    </script>
+
+    <script>
+
+        function addColorSelectionBirim() {
+            var colorSettings = document.getElementById('colorSettingsBirim');
+
+            // Create a new color-inner-selection div
+            var newColorInnerSelection = document.createElement('div');
+            newColorInnerSelection.className = 'color-inner-selection-birim';
+
+            // Create input fields for the new color-inner-selection
+            var inputPart = document.createElement('div');
+            inputPart.className = 'input-part-birim';
+            inputPart.innerHTML = '<label for="thresholdInput">Sınır:</label>' +
+                '<input class="threshold" type="number" value="0">';
+
+            var colorPart = document.createElement('div');
+            colorPart.className = 'color-part-birim';
+            colorPart.innerHTML = '<label for="colorInput">Renk:</label>' +
+                '<input type="color" value="#FF0000">';
+
+            newColorInnerSelection.appendChild(inputPart);
+            newColorInnerSelection.appendChild(colorPart);
+
+            // Append the new color-inner-selection to the colorSettings div
+            colorSettings.appendChild(newColorInnerSelection);
+
+            // Update the size of the popup
+            updatePopupSizeBirim();
+        }
+
+        // Function to delete the last added color-inner-selection
+        function deleteColorSelectionBirim() {
+            var colorSettings = document.getElementById('colorSettingsBirim');
+            var colorInnerSelections = document.querySelectorAll('.color-inner-selection-birim');
+
+            // Ensure there is at least one color-inner-selection to delete
+            if (colorInnerSelections.length > 0) {
+                // Remove the last color-inner-selection
+                colorSettings.removeChild(colorInnerSelections[colorInnerSelections.length - 1]);
+
+                // Update the size of the popup
+                updatePopupSizeBirim();
+            }
+        }
+
+        // Function to update the size of the popup based on the number of color-inner-selections
+        function updatePopupSizeBirim() {
+            var colorInnerSelections = document.querySelectorAll('.color-inner-selection-birim');
+            var popup = document.getElementById('popupBirim');
+
+            // Calculate the new height based on the number of color-inner-selections
+            var newHeight = 15 + colorInnerSelections.length * 5; // Adjust the factor as needed
+
+            // Update the height of the popup
+            popup.style.height = newHeight + '%';
+
+            console.log(popup.style.height);
+
+        }
+
+
+    </script>
+
+
+
+
+    <script>
+        // Function to open the pop-up
+        function openPopupBirim() {
+            document.getElementById('overlayBirim').style.display = 'block';
+        }
+
+        // Function to close the pop-up
+        function closePopupBirim() {
+            document.getElementById('overlayBirim').style.display = 'none';
+        }
+
+        function uygulaButtonBirim() {
+            document.getElementById('overlayBirim').style.display = 'none';
+
+            let newModel = @Html.Raw(JsonSerializer.Serialize(Model));
+            var colorParts = document.querySelectorAll('.color-inner-selection-birim');
+            console.log(newModel);
+            for (let i = 0; i < newModel.length; i++) {
+                updateColorsAndScalesBirim(i, colorParts);
+               
+            }
+
+        }
+
+    </script>
+
+    <script type="text/javascript">
+
+        document.getElementById('year-select-birim').addEventListener('change', function () {
+
+            for (let i = 0; i < modelBirim.length; i++) {
+
+                let d = modelBirim[i];
+                updateBirimBarChart(i, d);
+
+
+            }
+        });
+
+       
+
+    </script>
+ 
+
+
+</body>
+
+</html>
+

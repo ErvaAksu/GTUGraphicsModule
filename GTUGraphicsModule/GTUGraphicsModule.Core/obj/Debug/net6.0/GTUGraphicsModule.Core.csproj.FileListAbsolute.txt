@@ -1,0 +1,14 @@
+C:\Users\Erva\Desktop\Bitirme\GTUGraphicsModule\GTUGraphicsModule.Core\bin\Debug\net6.0\GTUGraphicsModule.Core.deps.json
+C:\Users\Erva\Desktop\Bitirme\GTUGraphicsModule\GTUGraphicsModule.Core\bin\Debug\net6.0\GTUGraphicsModule.Core.runtimeconfig.json
+C:\Users\Erva\Desktop\Bitirme\GTUGraphicsModule\GTUGraphicsModule.Core\bin\Debug\net6.0\GTUGraphicsModule.Core.dll
+C:\Users\Erva\Desktop\Bitirme\GTUGraphicsModule\GTUGraphicsModule.Core\bin\Debug\net6.0\GTUGraphicsModule.Core.pdb
+C:\Users\Erva\Desktop\Bitirme\GTUGraphicsModule\GTUGraphicsModule.Core\obj\Debug\net6.0\GTUGraphicsModule.Core.csproj.AssemblyReference.cache
+C:\Users\Erva\Desktop\Bitirme\GTUGraphicsModule\GTUGraphicsModule.Core\obj\Debug\net6.0\GTUGraphicsModule.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Erva\Desktop\Bitirme\GTUGraphicsModule\GTUGraphicsModule.Core\obj\Debug\net6.0\GTUGraphicsModule.Core.AssemblyInfoInputs.cache
+C:\Users\Erva\Desktop\Bitirme\GTUGraphicsModule\GTUGraphicsModule.Core\obj\Debug\net6.0\GTUGraphicsModule.Core.AssemblyInfo.cs
+C:\Users\Erva\Desktop\Bitirme\GTUGraphicsModule\GTUGraphicsModule.Core\obj\Debug\net6.0\GTUGraphicsModule.Core.csproj.CoreCompileInputs.cache
+C:\Users\Erva\Desktop\Bitirme\GTUGraphicsModule\GTUGraphicsModule.Core\obj\Debug\net6.0\GTUGraphicsModule.Core.dll
+C:\Users\Erva\Desktop\Bitirme\GTUGraphicsModule\GTUGraphicsModule.Core\obj\Debug\net6.0\refint\GTUGraphicsModule.Core.dll
+C:\Users\Erva\Desktop\Bitirme\GTUGraphicsModule\GTUGraphicsModule.Core\obj\Debug\net6.0\GTUGraphicsModule.Core.pdb
+C:\Users\Erva\Desktop\Bitirme\GTUGraphicsModule\GTUGraphicsModule.Core\obj\Debug\net6.0\GTUGraphicsModule.Core.genruntimeconfig.cache
+C:\Users\Erva\Desktop\Bitirme\GTUGraphicsModule\GTUGraphicsModule.Core\obj\Debug\net6.0\ref\GTUGraphicsModule.Core.dll

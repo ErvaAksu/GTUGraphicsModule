@@ -1,0 +1,18 @@
+﻿using GTUGraphicsModule.API.Business.Abstract;
+using GTUGraphicsModule.API.Context;
+using GTUGraphicsModule.Core.DataAccess;
+using GTUGraphicsModule.Core.EntityFramework;
+using GTUGraphicsModule.Models.Models;
+using System.Linq.Expressions;
+
+namespace GTUGraphicsModule.API.Business.Concrete
+{
+    public class Kalite_VeriKategorileri_RevizyonBusiness : EntityRepository<Kalite_VeriKategorileri_Revizyon>, IKalite_VeriKategorileri_RevizyonBusiness
+    {
+        private readonly GTUGraphicsModuleDbContext _context;
+        public Kalite_VeriKategorileri_RevizyonBusiness(GTUGraphicsModuleDbContext context) : base(context)
+        {
+            _context = context;
+        }
+    }
+}

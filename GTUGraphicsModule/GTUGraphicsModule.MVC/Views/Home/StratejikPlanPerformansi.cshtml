@@ -1,0 +1,292 @@
+﻿@{
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+@model GTUGraphicsModule.Models.Models.ViewModels.PerformansGostergeVeriKategorisiBirimVM
+@using Newtonsoft.Json;
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="~/css/StratejikPlanPerformansi.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.3/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+
+    <script src="~/js/stratejik_plan_performansi.js"></script>
+
+</head>
+
+<body>
+
+    <div class="inner-box">
+
+        <div class="inner-selection">
+
+            <div class="inner-head">
+                <h3>YÖNETİCİ PANELİ</h3>
+            </div>
+            <div class="buttons">
+
+                <button class="universite-button" onclick="showSection('universite-section', this)">Üniversite</button>
+                <button class="secili-bolum-button" onclick="showSection('secili-bolum-section', this)">Seçili Bölüm</button>
+                <button class="secili-konu-button" onclick="showSection('secili-konu-section', this)">Seçili Konu</button>
+
+            </div>
+
+        </div>
+
+        <section id="universite-section">
+            <div class="inner-section-layout">
+
+                <div class="selections-container">
+
+                    <select class="year-option" id="year-select">
+                        <option value="2023" selected>2023</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                        <option value="2027">2027</option>
+                    </select>
+
+                </div>
+
+                <div class="output-button-container">
+
+                    <button class="pdf-button" id="pdfButton">Pdf</button>
+                    <button class="excel-button" id="excelButton" onclick="exportToExcel()">Excel</button>
+
+                </div>
+
+
+
+            </div>
+
+
+            <script>
+
+                var model = @Html.Raw(JsonConvert.SerializeObject(Model));
+
+            </script>
+
+            <div id="pdf" class="box-container">
+
+                @for (int i = 0; i < Model.PerformansGostergeVeriKategorisiVMList.Count(); i++)
+            {
+                    <div class="box">
+                        <div class="plot-heading">
+                            <h3>@Model.PerformansGostergeVeriKategorisiVMList[i].VeriKategorisi.kod - @Model.PerformansGostergeVeriKategorisiVMList[i].VeriKategorisi.aciklama</h3>
+                    </div>
+
+                    <canvas id="scatter-chart-@i" height="200"></canvas>
+                    <canvas id="bar-chart-@i" height="200"></canvas>
+                </div>
+
+
+                <script>
+                    var viewModel = @Html.Raw(JsonConvert.SerializeObject(Model.PerformansGostergeVeriKategorisiVMList[i]));
+                    initializeScatterChart(@i, viewModel);
+                    initializeBarChart(@i, viewModel);
+                </script>
+
+
+
+            }
+
+            </div>
+
+        </section>
+        
+        <section id="secili-bolum-section">
+
+            <div class="option-panel">
+
+                <div class="birim-container">
+
+
+                    <div class="option">
+
+                        <select id="birim-option">
+                            <option value="" selected disabled>Birim</option>
+                            @for (int i = 0; i < Model.Birimler.Count(); i++)
+                            {
+                            <option value="@Model.Birimler[i].Id">@Model.Birimler[i].BirimAdi</option>
+                            }
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="button-container">
+
+                    <button class="option-button" onclick="getSelectedOption()">Getir</button>
+
+                </div>
+
+            </div>
+
+
+            <div id="birim-content-container">
+                <!-- This is where the dynamic content will be rendered -->
+            </div>
+
+
+        </section>
+
+        </section>
+
+        <section id="secili-konu-section">
+
+            <div class="option-panel">
+
+                <div class="birim-container">
+
+
+                    <div class="option">
+
+                        <select id="konu-option">
+                            <option value="" selected disabled>Konu</option>
+                            @for (int i = 0; i < Model.Konular.Count(); i++)
+                            {
+                                <option value="@Model.Konular[i].Id">@Model.Konular[i].KonuAdi</option>
+                            }
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="button-container">
+
+                    <button class="option-button" onclick="getSelectedOptionKonu()">Getir</button>
+
+                </div>
+
+            </div>
+
+
+            <div id="konu-content-container">
+                <!-- This is where the dynamic content will be rendered -->
+            </div>
+
+        </section>
+
+    </div>
+
+     <script>
+        document.getElementById('pdfButton').addEventListener('click', function () {
+            // Use html2pdf library to generate PDF
+            var element = document.getElementById('pdf');
+            html2pdf(element, {
+                margin: 1, // Adjust margin as needed
+                filename: 'chart.pdf',
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 1 }, // Adjust scale as needed
+                jsPDF: { format: 'a2', orientation: 'landscape' }
+            });
+        });
+    </script>
+
+
+    <script>
+
+        function showSection(sectionId, button) {
+            
+          var sections = document.querySelectorAll('section');
+          sections.forEach(function(section) {
+            section.style.display = 'none';
+          });
+
+          var buttons = document.querySelectorAll('button');
+          buttons.forEach(function(button) {
+            button.style.borderBottomColor = "white";
+          });
+
+          var selectedSection = document.getElementById(sectionId);
+          if (selectedSection) {
+          
+            selectedSection.style.display = 'block';
+            button.style.borderBottomColor = "#008DC5";
+          
+          }
+
+        }
+
+    </script>
+
+
+    <script>
+        function getSelectedOption() {
+            var selectedId = $("#birim-option").val();
+
+            $.ajax({
+                url: '/Home/BirimContent/' + selectedId,
+                type: 'GET',
+                success: function (data) {
+                    // Update the content of the "selected-content-container" with the fetched data
+                    $('#birim-content-container').html(data);
+                },
+                error: function () {
+                    console.log('Error occurred while fetching data.');
+                }
+            });
+        }
+    </script>
+
+    <script>
+
+        function getSelectedOptionKonu() {
+            var selectedId = $("#konu-option").val();
+
+            $.ajax({
+            url: '/Home/KonuContent/' + selectedId,
+            type: 'GET',
+            success: function (data) {
+            // Update the content of the "selected-content-container" with the fetched data
+            $('#konu-content-container').html(data);
+            },
+            error: function () {
+            console.log('Error occurred while fetching data.');
+            }
+            });
+        }
+    
+    </script>
+
+    <script>
+
+        document.getElementById('year-select').addEventListener('change', function () {
+            
+            console.log(model);
+                        for (let i = 0; i < model.PerformansGostergeVeriKategorisiVMList.length; i++) {
+
+                            var serializedData = model.PerformansGostergeVeriKategorisiVMList[i];
+                            updateScatterChart(i, serializedData);
+                            updateBarChart(i, serializedData);
+
+                        }
+                    });
+
+
+    </script>
+
+</body>
+
+</html>
+
+

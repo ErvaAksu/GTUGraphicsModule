@@ -1,0 +1,453 @@
+﻿ @{
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+@model GTUGraphicsModule.Models.Models.ViewModels.PerformansGostergeVeriKategorisiBirimVM
+@using System.Text.Json
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/StratejikPlanDetayli.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="~/js/stratejik_plan_detayli.js"></script>
+
+    <script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.3/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+
+</head>
+
+<body>
+
+    <div class="inner-box">
+
+        <div class="inner-selection">
+
+            <div class="inner-head">
+                <h3>YÖNETİCİ PANELİ</h3>
+            </div>
+
+           
+
+
+            <div class="buttons">
+
+                <button class="universite-button" onclick="showSection('universite-section', this)">Üniversite</button>
+                <button class="secili-bolum-button" onclick="showSection('secili-bolum-section', this)">Seçili Bölüm</button>
+                <button class="secili-konu-button" onclick="showSection('secili-konu-section', this)">Seçili Konu</button>
+
+            </div>
+
+        </div>
+
+        <section id="universite-section">
+            <div class="inner-section-layout">
+
+                <div class="selections-container">
+
+                    <div class="color-selection-button" onclick="openPopup()">Renk Paleti</div>
+
+                    <select class="year-option" id="year-select">
+                        <option value="2023" selected>2023</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                        <option value="2027">2027</option>
+                    </select>
+
+                </div>
+                
+                <div class="output-button-container">
+
+                    <button class="pdf-button" id="pdfButton">Pdf</button>
+                    <button class="excel-button" id="excelButton" onclick="exportChartToExcel()">Excel</button>
+
+                </div>
+
+                
+
+            </div>
+
+            <script>
+
+                var model = @Html.Raw(JsonSerializer.Serialize(Model));
+
+            </script>
+            
+            <!-- The overlay and pop-up content -->
+            <div id="overlay">
+                <div id="popup">
+                    <!-- Use a "Cancel" button to close the pop-up -->
+                    <button id="close" onclick="closePopup()">X</button>
+                    <div id="colorSettings">
+
+                        <!-- Existing color-inner-selection container -->
+                        <div class="color-inner-selection">
+                            <div class="input-part">
+                                <label for="thresholdInput">Sınır:</label>
+                                <input class="threshold" type="number" value="0">
+                            </div>
+
+                            <div class="color-part">
+                                <label for="colorInput">Renk:</label>
+                                <input type="color" value="#FF0000">
+                            </div>
+                        </div>
+
+                        <div id="add-delete-part">
+
+
+                            <button id="addColorSelection" onclick="addColorSelection()">
+
+                                <img class="icon" src="~/img/add-icon.png">
+
+                            </button>
+                            <button id="deleteColorSelection" onclick="deleteColorSelection()">
+
+                                <img class="icon" src="~/img/delete-icon.png">
+
+                            </button>
+
+
+                        </div>
+
+                        <!-- Button to trigger the color and scale update -->
+                        <button id="uygula-button" onclick="uygulaButton()">Uygula</button>
+                    </div>
+                </div>
+               
+            </div>
+            
+            <div id="pdf" class="box-container">
+                @for (int i = 0; i < Model.PerformansGostergeVeriKategorisiVMList.Count(); i++)
+                {
+                    <div class="box">
+                        <div class="box-heading">
+
+                            <h3>@Model.PerformansGostergeVeriKategorisiVMList[i].VeriKategorisi.kod - @Model.PerformansGostergeVeriKategorisiVMList[i].VeriKategorisi.aciklama</h3>
+
+                        </div>
+
+                        <div class="chart-table">
+
+                            <div class="horizontal-bar">
+
+                                <canvas id="bar-chart-@i" height="200"></canvas>
+
+                            </div>
+
+                            <div class="table" id="table-@i">
+                                <table>
+                                    <caption class="table-heading" id="table-heading-@i"></caption>
+                                    <thead>
+                                        <tr>
+                                            <th>Performans Göstergeleri</th>
+                                            <th>H</th>
+                                            <th>G</th>
+                                            <th>Gerçekleşme Oranı %</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table-body-@i">
+
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+
+                            <script>
+                                var viewModel = @Html.Raw(JsonSerializer.Serialize(Model.PerformansGostergeVeriKategorisiVMList[@i]));
+                                initializeBarChart(@i, viewModel);
+                            </script>
+
+
+                        </div>
+
+
+                    </div>
+                }
+            </div>
+
+        </section>
+
+        <section id="secili-bolum-section">
+            <div class="option-panel">
+
+                <div class="birim-container">
+
+
+                     <div class="option">
+
+                        <select id="birim-option">
+                            <option value="" selected disabled>Birim</option>
+                            @for (int i = 0; i < Model.Birimler.Count(); i++)
+                            {
+                            <option value="@Model.Birimler[i].Id">@Model.Birimler[@i].BirimAdi</option>
+                            }
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="button-container">
+
+                    <button class="option-button" onclick="getSelectedOption()">Getir</button>
+
+                </div>
+
+            </div>
+
+            <div id="birim-content-container">
+                <!-- This is where the dynamic content will be rendered -->
+            </div>
+
+        </section>
+
+        </section>
+
+        <section id="secili-konu-section">
+
+            <div class="option-panel">
+
+                <div class="birim-container">
+
+
+                    <div class="option">
+
+                        <select id="konu-option">
+                            <option value="" selected disabled>Konu</option>
+                            @for (int i = 0; i < Model.Konular.Count(); i++)
+                            {
+                                <option value="@Model.Konular[i].Id">@Model.Konular[i].KonuAdi</option>
+                            }
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="button-container">
+
+                    <button class="option-button" onclick="getSelectedOptionKonu()">Getir</button>
+
+                </div>
+
+            </div>
+
+
+            <div id="konu-content-container">
+                <!-- This is where the dynamic content will be rendered -->
+            </div>
+
+        </section>
+
+    </div>
+
+    <script>
+        document.getElementById('pdfButton').addEventListener('click', function () {
+            // Use html2pdf library to generate PDF
+            var element = document.getElementById('pdf');
+            html2pdf(element, {
+                margin: 1, // Adjust margin as needed
+                filename: 'chart.pdf',
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 1 }, // Adjust scale as needed
+                jsPDF: { format: 'a2', orientation: 'landscape' }
+            });
+        });
+    </script>
+
+    <script>
+
+        function showSection(sectionId, button) {
+
+            var sections = document.querySelectorAll('section');
+            sections.forEach(function (section) {
+                section.style.display = 'none';
+            });
+
+            var buttons = document.querySelectorAll('button');
+            buttons.forEach(function (button) {
+                button.style.borderBottomColor = "white";
+            });
+
+            var selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+
+                selectedSection.style.display = 'block';
+                button.style.borderBottomColor = "#008DC5";
+
+            }
+
+        }
+
+    </script>
+
+    <script>
+        function getSelectedOption() {
+            var selectedId = $("#birim-option").val();
+
+            $.ajax({
+                url: '/Home/BirimContentDetayli/' + selectedId,
+                type: 'GET',
+                success: function (data) {
+                    // Update the content of the "selected-content-container" with the fetched data
+                    $('#birim-content-container').html(data);
+                },
+                error: function () {
+                    console.log('Error occurred while fetching data.');
+                }
+            });
+        }
+    </script>
+
+    <script>
+
+        function getSelectedOptionKonu() {
+            var selectedId = $("#konu-option").val();
+
+            $.ajax({
+                url: '/Home/KonuContentDetayli/' + selectedId,
+                type: 'GET',
+                success: function (data) {
+                    // Update the content of the "selected-content-container" with the fetched data
+                    $('#konu-content-container').html(data);
+                },
+                error: function () {
+                    console.log('Error occurred while fetching data.');
+                }
+            });
+        }
+
+    </script>
+
+    <script>
+
+        function addColorSelection() {
+            var colorSettings = document.getElementById('colorSettings');
+
+            // Create a new color-inner-selection div
+            var newColorInnerSelection = document.createElement('div');
+            newColorInnerSelection.className = 'color-inner-selection';
+
+            // Create input fields for the new color-inner-selection
+            var inputPart = document.createElement('div');
+            inputPart.className = 'input-part';
+            inputPart.innerHTML = '<label for="thresholdInput">Sınır:</label>' +
+                '<input class="threshold" type="number" value="0">';
+
+            var colorPart = document.createElement('div');
+            colorPart.className = 'color-part';
+            colorPart.innerHTML = '<label for="colorInput">Renk:</label>' +
+                '<input type="color" value="#FF0000">';
+
+            newColorInnerSelection.appendChild(inputPart);
+            newColorInnerSelection.appendChild(colorPart);
+
+            // Append the new color-inner-selection to the colorSettings div
+            colorSettings.appendChild(newColorInnerSelection);
+
+            // Update the size of the popup
+            updatePopupSize();
+        }
+
+        // Function to delete the last added color-inner-selection
+        function deleteColorSelection() {
+            var colorSettings = document.getElementById('colorSettings');
+            var colorInnerSelections = document.querySelectorAll('.color-inner-selection');
+
+            // Ensure there is at least one color-inner-selection to delete
+            if (colorInnerSelections.length > 0) {
+                // Remove the last color-inner-selection
+                colorSettings.removeChild(colorInnerSelections[colorInnerSelections.length - 1]);
+
+                // Update the size of the popup
+                updatePopupSize();
+            }
+        }
+
+        // Function to update the size of the popup based on the number of color-inner-selections
+        function updatePopupSize() {
+            var colorInnerSelections = document.querySelectorAll('.color-inner-selection');
+            var popup = document.getElementById('popup');
+
+            // Calculate the new height based on the number of color-inner-selections
+            var newHeight = 15 + colorInnerSelections.length * 5; // Adjust the factor as needed
+
+            // Update the height of the popup
+            popup.style.height = newHeight + '%';
+
+            console.log(popup.style.height);
+
+        }
+
+
+    </script>
+
+
+
+
+    <script>
+        // Function to open the pop-up
+        function openPopup() {
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+
+        function closePopup() {
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        function uygulaButton() {
+            document.getElementById('overlay').style.display = 'none';
+
+
+            let newModel = @Html.Raw(JsonSerializer.Serialize(Model.PerformansGostergeVeriKategorisiVMList));
+            console.log(newModel);
+            var colorParts = document.querySelectorAll('.color-inner-selection');
+            for (let i = 0; i < newModel.length; i++) {
+                updateColorsAndScales(i, colorParts);
+               
+            }
+            
+        }
+
+    </script>
+
+
+    <script>
+
+        document.getElementById('year-select').addEventListener('change', function () {
+
+            console.log('buradaaaa ilk olmamalı');
+            for (let i = 0; i < model.PerformansGostergeVeriKategorisiVMList.length; i++) {
+
+                var serializedData = model.PerformansGostergeVeriKategorisiVMList[i];
+                updateBarChart(i, serializedData);
+
+            }
+        });
+
+
+    </script>
+
+
+
+</body>
+
+</html>
+
+

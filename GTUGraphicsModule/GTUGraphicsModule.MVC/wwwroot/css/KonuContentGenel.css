@@ -1,0 +1,101 @@
+﻿
+.box-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+}
+
+
+.box {
+    display: flex;
+    width: 90%;
+    margin-left: 20px;
+    margin-right: 10px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    padding: 20px;
+    border: 1px solid #97a2c7;
+    border-radius: 12px;
+    background-color: #f4f4f4;
+    height: 800px;
+}
+
+
+canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+
+.plot-heading {
+    color: rgb(88, 88, 88);
+    font-size: small;
+    margin-bottom: 50px;
+}
+
+
+.point-chart-container {
+    margin-left: 50px;
+    margin-top: 120px;
+    height: 60%;
+    width: 40%;
+}
+
+.polar-area-chart-container {
+    width: 60%;
+    margin-right: 50px;
+}
+
+.inner-section-layout {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px;
+}
+
+.selections-container, .output-button-container {
+    display: flex;
+    align-items: center;
+}
+
+
+.pdf-button {
+    justify-content: right;
+    margin: 10px;
+    margin-top: 30px;
+    margin-left: 2px;
+    border: 2px solid #97a2c7;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    color: rgb(88, 88, 88);
+    background-color: #f4f4f4;
+    width: 80px;
+    height: 30px;
+    cursor: pointer;
+}
+
+    .pdf-button:hover {
+        background-color: #D2D4DA;
+    }
+
+
+.excel-button {
+    justify-content: right;
+    margin: 10px;
+    margin-top: 30px;
+    margin-left: 2px;
+    border: 2px solid #97a2c7;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    color: rgb(88, 88, 88);
+    background-color: #f4f4f4;
+    width: 80px;
+    height: 30px;
+    cursor: pointer;
+}
+
+    .excel-button:hover {
+        background-color: #D2D4DA;
+    }

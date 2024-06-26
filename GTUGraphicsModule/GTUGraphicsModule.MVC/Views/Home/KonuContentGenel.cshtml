@@ -1,0 +1,87 @@
+﻿@model IList<GTUGraphicsModule.Models.Models.ViewModels.PerformansGostergeKonuVM>
+
+@using Newtonsoft.Json;
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="~/css/KonuContentGenel.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.js"></script>
+    <script src="~/js/konu_content_genel.js"></script>
+
+</head>
+
+<body>
+    <div class="box-container">
+
+        <div class="inner-section-layout">
+
+            <div class="selections-container">
+            </div>
+
+            <div class="output-button-container">
+
+                <button class="pdf-button" id="pdfButtonKonu">Pdf</button>
+                <button class="excel-button" id="excelButtonKonu" onclick="exportToExcelKonu()">Excel</button>
+
+            </div>
+
+
+
+        </div>
+
+
+        <div id="pdfKonu" class="box">
+
+            <div class="point-chart-container">
+
+                <canvas id="line-chart-konu" width="100" height="100"></canvas>
+
+            </div>
+
+
+            <div class="polar-area-chart-container">
+
+                <canvas id="polar-chart-konu" width="100" height="50" style="display: none;"></canvas>
+
+            </div>
+
+
+
+            <script>
+
+                var konuViewModel = @Html.Raw(JsonConvert.SerializeObject(Model));
+                initializeKonuLineChart(konuViewModel);
+
+            </script>
+
+        </div>
+
+
+    </div>
+
+
+    <script>
+        document.getElementById('pdfButtonKonu').addEventListener('click', function () {
+            // Use html2pdf library to generate PDF
+            var element = document.getElementById('pdfKonu');
+            html2pdf(element, {
+                margin: 1, // Adjust margin as needed
+                filename: 'chart.pdf',
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 1 }, // Adjust scale as needed
+                jsPDF: { format: 'a2', orientation: 'landscape' }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
+

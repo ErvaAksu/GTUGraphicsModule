@@ -1,0 +1,61 @@
+is_global = true
+build_property.TargetFramework = net6.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = GTUGraphicsModule.MVC
+build_property.RootNamespace = GTUGraphicsModule.MVC
+build_property.ProjectDir = C:\Users\Erva\Desktop\Bitirme\GTUGraphicsModule\GTUGraphicsModule.MVC\
+build_property.RazorLangVersion = 6.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\Erva\Desktop\Bitirme\GTUGraphicsModule\GTUGraphicsModule.MVC
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/Erva/Desktop/Bitirme/GTUGraphicsModule/GTUGraphicsModule.MVC/Views/Home/BirimContent.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxCaXJpbUNvbnRlbnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Erva/Desktop/Bitirme/GTUGraphicsModule/GTUGraphicsModule.MVC/Views/Home/BirimContentDetayli.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxCaXJpbUNvbnRlbnREZXRheWxpLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Erva/Desktop/Bitirme/GTUGraphicsModule/GTUGraphicsModule.MVC/Views/Home/BirimContentGenel.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxCaXJpbUNvbnRlbnRHZW5lbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Erva/Desktop/Bitirme/GTUGraphicsModule/GTUGraphicsModule.MVC/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Erva/Desktop/Bitirme/GTUGraphicsModule/GTUGraphicsModule.MVC/Views/Home/KonuContent.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxLb251Q29udGVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Erva/Desktop/Bitirme/GTUGraphicsModule/GTUGraphicsModule.MVC/Views/Home/KonuContentDetayli.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxLb251Q29udGVudERldGF5bGkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Erva/Desktop/Bitirme/GTUGraphicsModule/GTUGraphicsModule.MVC/Views/Home/KonuContentGenel.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxLb251Q29udGVudEdlbmVsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Erva/Desktop/Bitirme/GTUGraphicsModule/GTUGraphicsModule.MVC/Views/Home/StratejikPlanDetayli.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTdHJhdGVqaWtQbGFuRGV0YXlsaS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Erva/Desktop/Bitirme/GTUGraphicsModule/GTUGraphicsModule.MVC/Views/Home/StratejikPlanGenel.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTdHJhdGVqaWtQbGFuR2VuZWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Erva/Desktop/Bitirme/GTUGraphicsModule/GTUGraphicsModule.MVC/Views/Home/StratejikPlanPerformansi.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTdHJhdGVqaWtQbGFuUGVyZm9ybWFuc2kuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Erva/Desktop/Bitirme/GTUGraphicsModule/GTUGraphicsModule.MVC/Views/Shared/Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXExheW91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 

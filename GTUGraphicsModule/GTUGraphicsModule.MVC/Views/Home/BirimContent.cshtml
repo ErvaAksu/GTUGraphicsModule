@@ -1,0 +1,114 @@
+﻿@model IList<GTUGraphicsModule.Models.Models.ViewModels.PerformansGostergeBirimVM>
+
+@using Newtonsoft.Json;
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="~/css/BirimContent.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.js"></script>
+    <script src="~/js/birim_content.js"></script>
+
+</head>
+
+<body>
+    <div class="inner-section-layout">
+
+        <div class="selections-container">
+
+            <select class="year-option" id="year-select-birim">
+                <option value="2023" selected>2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+            </select>
+
+        </div>
+
+        <div class="output-button-container">
+
+            <button class="pdf-button" id="pdfButtonBirim">Pdf</button>
+            <button class="excel-button" id="excelButtonBirim" onclick="exportToExcelBirim()">Excel</button>
+
+        </div>
+
+
+
+    </div>
+
+    <script>
+
+        var modelBirim = @Html.Raw(JsonConvert.SerializeObject(Model));
+
+    </script>
+
+    <div id="pdfBirim" class="box-container">
+
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            <div class="box">
+                <div class="plot-heading">
+                    <h3>@Model[@i].VeriKategorisi.kod - @Model[@i].VeriKategorisi.aciklama</h3>
+                </div>
+
+                <canvas id="birim-scatter-chart-@i" height="200"></canvas>
+                <canvas id="birim-bar-chart-@i" height="200"></canvas>
+            </div>
+
+
+            <script>
+                var birimViewModel = @Html.Raw(JsonConvert.SerializeObject(Model[@i]));
+                initializeBirimScatterChart(@i, birimViewModel);
+                initializeBirimBarChart(@i, birimViewModel);
+            </script>
+
+
+
+        }
+
+    </div>
+
+    
+    <script>
+        document.getElementById('pdfButtonBirim').addEventListener('click', function () {
+            // Use html2pdf library to generate PDF
+            var element = document.getElementById('pdfBirim');
+            html2pdf(element, {
+                margin: 1, // Adjust margin as needed
+                filename: 'chart.pdf',
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 1 }, // Adjust scale as needed
+                jsPDF: { format: 'a2', orientation: 'landscape' }
+            });
+        });
+    </script>
+
+     <script>
+
+        document.getElementById('year-select-birim').addEventListener('change', function () {
+
+            for (let i = 0; i < modelBirim.length; i++) {
+
+                let d = modelBirim[i];
+                updateBirimScatterChart(i ,d);
+                updateBirimBarChart(i, d);
+
+
+            }
+        });
+
+       
+
+    </script>
+ 
+</body>
+
+
+</html>

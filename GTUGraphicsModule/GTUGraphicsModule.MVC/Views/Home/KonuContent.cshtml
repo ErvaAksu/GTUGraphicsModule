@@ -1,0 +1,114 @@
+﻿@model IList<GTUGraphicsModule.Models.Models.ViewModels.PerformansGostergeKonuVM>
+
+@using Newtonsoft.Json;
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="~/css/KonuContent.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.js"></script>
+    <script src="~/js/konu_content.js"></script>
+
+</head>
+
+<body>
+    <div class="inner-section-layout">
+
+        <div class="selections-container">
+
+            <select class="year-option" id="year-select-konu">
+                <option value="2023" selected>2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+            </select>
+
+        </div>
+
+        <div class="output-button-container">
+
+            <button class="pdf-button" id="pdfButtonKonu">Pdf</button>
+            <button class="excel-button" id="excelButtonKonu" onclick="exportToExcelKonu()">Excel</button>
+
+        </div>
+
+
+
+    </div>
+
+    <script>
+
+        var modelKonu = @Html.Raw(JsonConvert.SerializeObject(Model));
+
+    </script>
+
+    <div id="pdfKonu" class="box-container">
+
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            <div class="box">
+                <div class="plot-heading">
+                    <h3>@Model[@i].VeriKategorisi.kod - @Model[@i].VeriKategorisi.aciklama</h3>
+                </div>
+
+                <canvas id="konu-scatter-chart-@i" height="200"></canvas>
+                <canvas id="konu-bar-chart-@i" height="200"></canvas>
+            </div>
+
+
+            <script>
+                var konuViewModel = @Html.Raw(JsonConvert.SerializeObject(Model[@i]));
+                initializeKonuScatterChart(@i, konuViewModel);
+                initializeKonuBarChart(@i, konuViewModel);
+            </script>
+
+
+
+        }
+
+    </div>
+
+
+    <script>
+        document.getElementById('pdfButtonKonu').addEventListener('click', function () {
+            // Use html2pdf library to generate PDF
+            var element = document.getElementById('pdfKonu');
+            html2pdf(element, {
+                margin: 1, // Adjust margin as needed
+                filename: 'chart.pdf',
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 1 }, // Adjust scale as needed
+                jsPDF: { format: 'a2', orientation: 'landscape' }
+            });
+        });
+    </script>
+
+    <script>
+
+        document.getElementById('year-select-konu').addEventListener('change', function () {
+
+            for (let i = 0; i < modelKonu.length; i++) {
+
+                let d = modelKonu[i];
+                updateKonuScatterChart(i, d);
+                updateKonuBarChart(i, d);
+
+
+            }
+        });
+
+
+
+    </script>
+
+</body>
+
+
+</html>
